@@ -1,4 +1,4 @@
-package simple.kanban;
+package com.jhallat.simple.kanban;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

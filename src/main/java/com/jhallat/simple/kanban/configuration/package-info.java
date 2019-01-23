@@ -5,4 +5,4 @@
  * @author John Hallat
  *
  */
-package simple.kanban.controller;
+package com.jhallat.simple.kanban.configuration;

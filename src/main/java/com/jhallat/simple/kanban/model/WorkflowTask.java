@@ -1,4 +1,4 @@
-package simple.kanban.model;
+package com.jhallat.simple.kanban.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,8 +7,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="backlog_task")
-public class BacklogTask {
+@Table(name="workflow_task")
+public class WorkflowTask {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -34,6 +34,5 @@ public class BacklogTask {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
 	
 }
