@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.jhallat.simple.kanban.model.Status;
 import com.jhallat.simple.kanban.repository.StatusRepository;
 
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 @RequestMapping("api/v1")
 public class BacklogStatusController {
@@ -20,6 +22,8 @@ public class BacklogStatusController {
 	private StatusRepository statusRepository;
 	
 	@GetMapping("backlog-statuses")
+	@ApiOperation(value="Find backlog statuses",
+	              notes="Returns all status values related to backlog tasks.")
 	public List<Status> getBacklogStatuses() {
 		return statusRepository.findByCategory(CATEGORY);
 	}
