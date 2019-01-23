@@ -7,12 +7,13 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="backlog_status")
-public class BacklogStatus {
+@Table(name="status")
+public class Status {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
+	private String category;
 	private String code;
 	private String description;
 	
@@ -30,6 +31,14 @@ public class BacklogStatus {
 	
 	public void setCode(String code) {
 		this.code = code;
+	}
+	
+	public String getCategory() {
+		return this.category;
+	}
+	
+	public void setCategory(String category) {
+		this.category = category;
 	}
 	
 	public String getDescription() {

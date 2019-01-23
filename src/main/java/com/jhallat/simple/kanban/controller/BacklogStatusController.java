@@ -7,19 +7,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.jhallat.simple.kanban.model.BacklogStatus;
-import com.jhallat.simple.kanban.repository.BacklogStatusRepository;
+import com.jhallat.simple.kanban.model.Status;
+import com.jhallat.simple.kanban.repository.StatusRepository;
 
 @RestController
 @RequestMapping("api/v1")
 public class BacklogStatusController {
 
+	private static final String CATEGORY = "backlog";
+	
 	@Autowired
-	private BacklogStatusRepository backlogStatusRepository;
+	private StatusRepository statusRepository;
 	
 	@GetMapping("backlog-statuses")
-	public List<BacklogStatus> getBacklogStatuses() {
-		return backlogStatusRepository.findAll();
+	public List<Status> getBacklogStatuses() {
+		return statusRepository.findByCategory(CATEGORY);
 	}
 	
 }
