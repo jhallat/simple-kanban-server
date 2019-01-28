@@ -12,30 +12,28 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.jhallat.simple.kanban.model.BacklogStatus;
+import com.jhallat.simple.kanban.model.Status;
 import com.jhallat.simple.kanban.model.BacklogTask;
-import com.jhallat.simple.kanban.model.WorkflowStatus;
 import com.jhallat.simple.kanban.model.WorkflowTask;
-import com.jhallat.simple.kanban.repository.BacklogStatusRepository;
 import com.jhallat.simple.kanban.repository.BacklogTaskRepository;
-import com.jhallat.simple.kanban.repository.WorkflowStatusRepository;
+import com.jhallat.simple.kanban.repository.StatusRepository;
 import com.jhallat.simple.kanban.repository.WorkflowTaskRepository;
 
 @RestController
 @RequestMapping("api/v1")
 public class BacklogTaskController {
 
-	@Autowired
-	private BacklogTaskRepository backlogTaskRepository;
+	private static final String BACKLOG = "backlog";
+	private static final String WORKFLOW = "workflow";
 	
 	@Autowired
-	private BacklogStatusRepository backlogStatusRepository;
+	private BacklogTaskRepository backlogTaskRepository;
 	
 	@Autowired
 	private WorkflowTaskRepository workflowTaskRepository;
 	
 	@Autowired
-	private WorkflowStatusRepository workflowStatusRepository;
+	private StatusRepository statusRepository;
 	
 	private int workflowId = 0;
 	private int readyId = 0;
@@ -58,14 +56,14 @@ public class BacklogTaskController {
 	public BacklogTask updateBacklogTask(@PathVariable("id") int id, @RequestBody BacklogTask backlogTask){
 		
 		if (workflowId == 0) {
-			Optional<BacklogStatus> returnValue = backlogStatusRepository.findByCode("workflow");
+			Optional<Status> returnValue = statusRepository.findByCategoryAndCode(BACKLOG, "workflow");
 			if (returnValue.isPresent()) {
 				workflowId = returnValue.get().getId();
 			}
 		}
 		
 		if (readyId == 0) {
-			Optional<WorkflowStatus> returnValue = workflowStatusRepository.findByCode("ready");
+			Optional<Status> returnValue = statusRepository.findByCategoryAndCode(WORKFLOW, "ready");
 			if (returnValue.isPresent()) {
 				readyId = returnValue.get().getId();
 			}
