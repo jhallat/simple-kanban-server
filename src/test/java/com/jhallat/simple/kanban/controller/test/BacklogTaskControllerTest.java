@@ -1,8 +1,10 @@
 package com.jhallat.simple.kanban.controller.test;
 
-import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.assertj.core.api.Assertions;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,7 +27,7 @@ public class BacklogTaskControllerTest {
 	
 	@Test
 	public void contextLoads() {
-		Assert.assertNotNull(backlogTaskController);
+		assertThat(backlogTaskController, notNullValue());
 	}
 
 	
@@ -46,11 +48,11 @@ public class BacklogTaskControllerTest {
 		
 		ResponseEntity<BacklogTask> response = restTemplate.postForEntity(postURL, backlogTask, BacklogTask.class);
 		BacklogTask postTask = response.getBody();
-		Assertions.assertThat(postTask.getId()).isGreaterThan(0);
+		assertThat(postTask.getId(), greaterThan(0));
 		
 		String getURL = String.format("http://localhost:8080/backlog-tasks/%s", postTask.getId());
 		BacklogTask getTask = restTemplate.getForObject(getURL, BacklogTask.class);
-		//Assertions.assertThat(getTask.getDescription(), equalTo(DESCRIPTION));
+		assertThat(getTask.getDescription(), equalTo(DESCRIPTION));
 		
 		
 	}
