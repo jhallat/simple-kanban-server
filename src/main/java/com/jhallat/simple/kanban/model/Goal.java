@@ -1,5 +1,7 @@
 package com.jhallat.simple.kanban.model;
 
+import java.time.LocalDate;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,6 +16,8 @@ public class Goal {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	private int statusId;
+	private int priority;
+	private LocalDate creationDate;
 	private String description;
 	private String expectation;
 	private String alternatives;
@@ -54,6 +58,18 @@ public class Goal {
 	}
 	public void setStrategy(String strategy) {
 		this.strategy = strategy;
+	}
+	public int getPriority() {
+		return priority;
+	}
+	public void setPriority(int priority) {
+		this.priority = priority;
+	}
+	public LocalDate getCreationDate() {
+		return creationDate;
+	}
+	public void setCreationDate(LocalDate creationDate) {
+		this.creationDate = creationDate;
 	}
 	
 	

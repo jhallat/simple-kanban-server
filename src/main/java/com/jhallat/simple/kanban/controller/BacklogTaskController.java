@@ -3,7 +3,13 @@ package com.jhallat.simple.kanban.controller;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+import javax.validation.ValidationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,8 +18,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.jhallat.simple.kanban.model.Status;
+import com.jhallat.simple.kanban.exception.NotFoundException;
 import com.jhallat.simple.kanban.model.BacklogTask;
+import com.jhallat.simple.kanban.model.Status;
 import com.jhallat.simple.kanban.model.WorkflowTask;
 import com.jhallat.simple.kanban.repository.BacklogTaskRepository;
 import com.jhallat.simple.kanban.repository.StatusRepository;
@@ -37,16 +44,25 @@ public class BacklogTaskController {
 	
 	private int workflowId = 0;
 	private int readyId = 0;
+
 	
 	@GetMapping("/backlog-tasks")
-	public List<BacklogTask> getBacklogTasks() {
-		
-		return backlogTaskRepository.findAll();
+	public ResponseEntity<List<BacklogTask>> getBacklogTasks() throws NotFoundException {
+	
+		List<BacklogTask> backlogTasks = backlogTaskRepository.findAll();
+		if (backlogTasks.isEmpty()) {
+			throw new NotFoundException("No backlog tasks found");
+		} 
+		return new ResponseEntity<>(backlogTasks, HttpStatus.OK);
 		
 	}
 	
 	@PostMapping("/backlog-tasks")
-	public BacklogTask addBacklogTask(@RequestBody BacklogTask backlogTask) {
+	public BacklogTask addBacklogTask(@Valid @RequestBody BacklogTask backlogTask)  {
+		
+		if (backlogTask.getId() != 0) {
+			throw new ValidationException("Id for a new backlog task must be unassigned");
+		}
 		
 		return backlogTaskRepository.saveAndFlush(backlogTask);
 		
@@ -89,5 +105,12 @@ public class BacklogTaskController {
 		}
 		
 		
+	}
+	
+	@DeleteMapping("/backlog-tasks/{id}")
+	public ResponseEntity<BacklogTask> deleteBacklogTask(@PathVariable("id") int id, @RequestBody BacklogTask backlogTask) {
+		//TODO Check to see if item exists and return a not found error if it does not
+		backlogTaskRepository.delete(backlogTask);
+		return new ResponseEntity(backlogTask, HttpStatus.OK);
 	}
 }
