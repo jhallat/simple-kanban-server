@@ -107,10 +107,15 @@ public class BacklogTaskController {
 		
 	}
 	
-	@DeleteMapping("/backlog-tasks/{id}")
-	public ResponseEntity<BacklogTask> deleteBacklogTask(@PathVariable("id") int id, @RequestBody BacklogTask backlogTask) {
+	@DeleteMapping("/backlog-task/{id}")
+	public ResponseEntity<BacklogTask> deleteBacklogTask(@PathVariable("id") int id) throws NotFoundException {
 		//TODO Check to see if item exists and return a not found error if it does not
-		backlogTaskRepository.delete(backlogTask);
-		return new ResponseEntity(backlogTask, HttpStatus.OK);
+		Optional<BacklogTask> returnValue = backlogTaskRepository.findById(id);
+		if (returnValue.isPresent()) {
+			BacklogTask backlogTask = returnValue.get();
+			backlogTaskRepository.delete(backlogTask);
+			return new ResponseEntity<>(backlogTask, HttpStatus.OK);
+		}
+		throw new NotFoundException(String.format("Backlog Task id = %s not found.", id));
 	}
 }

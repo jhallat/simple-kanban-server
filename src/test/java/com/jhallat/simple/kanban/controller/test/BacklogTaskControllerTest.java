@@ -1,15 +1,20 @@
 package com.jhallat.simple.kanban.controller.test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.beans.HasPropertyWithValue.hasProperty;
 
-import org.junit.Assert;
+import java.util.List;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
@@ -30,7 +35,8 @@ public class BacklogTaskControllerTest {
 		assertThat(backlogTaskController, notNullValue());
 	}
 
-	
+	//TODO This test only works if service is running.
+	//TODO Make system tests separate from unit tests
 	@Test
 	public void testCRUDOperations() {
 		
@@ -39,7 +45,7 @@ public class BacklogTaskControllerTest {
 		
 		RestTemplate restTemplate = new RestTemplate();
 		//TODO Externalize URL??
-		String postURL = "http://localhost:8080/backlog-tasks";
+		String postURL = "http://localhost:8080/api/v1/backlog-tasks";
 		
 		BacklogTask backlogTask = new BacklogTask();
 		backlogTask.setId(0);
@@ -50,10 +56,21 @@ public class BacklogTaskControllerTest {
 		BacklogTask postTask = response.getBody();
 		assertThat(postTask.getId(), greaterThan(0));
 		
-		String getURL = String.format("http://localhost:8080/backlog-tasks/%s", postTask.getId());
-		BacklogTask getTask = restTemplate.getForObject(getURL, BacklogTask.class);
-		assertThat(getTask.getDescription(), equalTo(DESCRIPTION));
+		String getURL = String.format("http://localhost:8080/api/v1/backlog-tasks", postTask.getId());
+		ResponseEntity<List<BacklogTask>> getResponse = restTemplate.exchange(
+				getURL,
+				HttpMethod.GET,
+				null,
+				new ParameterizedTypeReference<List<BacklogTask>>() {});
+		List<BacklogTask> getTasks = getResponse.getBody();
 		
+		assertThat(getTasks, hasItem(hasProperty("description", equalTo(DESCRIPTION))));
+		assertThat(getTasks, hasItem(hasProperty("id", equalTo(postTask.getId()))));
+		
+		String deleteURL = String.format("http://localhost:8080/api/v1/backlog-task/%s", postTask.getId());
+		restTemplate.delete(deleteURL);
+
+
 		
 	}
 	
