@@ -5,6 +5,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name="backlog_task")
@@ -13,7 +15,9 @@ public class BacklogTask {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
+	@Min(1)
 	private int statusId;
+	@NotBlank
 	private String description;
 	
 	public int getId() {

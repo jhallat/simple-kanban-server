@@ -16,7 +16,8 @@ INSERT INTO status (category, code, description) VALUES ('workflow','done', 'Don
 INSERT INTO status (category, code, description) VALUES ('workflow','cancelled', 'Cancelled');
 
 INSERT INTO status (category, code, description) VALUES ('goal', 'active', 'Active');
-INSERT INTO status (category, code, description) VALUES ('goal','cancelled', 'Cancelled');
+INSERT INTO status (category, code, description) VALUES ('goal', 'completed', 'Completed');
+INSERT INTO status (category, code, description) VALUES ('goal', 'cancelled', 'Cancelled');
 
 
 CREATE TABLE backlog_task (
@@ -36,6 +37,8 @@ CREATE TABLE workflow_task (
 CREATE TABLE goal (
 	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
 	status_id INT NOT NULL,
+	priority INT NOT NULL,
+	creation_date DATE,
 	description VARCHAR(250),
 	expectation TEXT,
 	alternatives TEXT,
