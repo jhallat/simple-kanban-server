@@ -16,6 +16,7 @@ public class Status {
 	private String category;
 	private String code;
 	private String description;
+	private boolean initial;
 	
 	public int getId() {
 		return id;
@@ -47,6 +48,14 @@ public class Status {
 	
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public boolean isInitial() {
+		return initial;
+	}
+
+	public void setInitial(boolean initial) {
+		this.initial = initial;
 	}
 	
 }

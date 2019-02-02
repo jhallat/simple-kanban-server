@@ -1,5 +1,7 @@
 package com.jhallat.simple.kanban.model;
 
+import java.time.LocalDate;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,6 +17,8 @@ public class WorkflowTask {
 	private int id;
 	private int statusId;
 	private String description;
+	private LocalDate creationDate;
+	private LocalDate statusDate;
 	
 	public int getId() {
 		return id;
@@ -33,6 +37,18 @@ public class WorkflowTask {
 	}
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	public LocalDate getStatusDate() {
+		return statusDate;
+	}
+	public void setStatusDate(LocalDate statusDate) {
+		this.statusDate = statusDate;
+	}
+	public LocalDate getCreationDate() {
+		return creationDate;
+	}
+	public void setCreationDate(LocalDate creationDate) {
+		this.creationDate = creationDate;
 	}
 	
 }

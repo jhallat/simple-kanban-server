@@ -1,5 +1,6 @@
 package com.jhallat.simple.kanban.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,6 +26,8 @@ import com.jhallat.simple.kanban.model.WorkflowTask;
 import com.jhallat.simple.kanban.repository.BacklogTaskRepository;
 import com.jhallat.simple.kanban.repository.StatusRepository;
 import com.jhallat.simple.kanban.repository.WorkflowTaskRepository;
+
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("api/v1")
@@ -58,10 +61,16 @@ public class BacklogTaskController {
 	}
 	
 	@PostMapping("/backlog-tasks")
+	@ApiOperation(value="Add a backlog task",
+	              notes="Adds a backlog task and returns the newly created task. If the creation date has not been set by the caller, the " + 
+	                    "creation date will be set to the current date")
 	public BacklogTask addBacklogTask(@Valid @RequestBody BacklogTask backlogTask)  {
 		
 		if (backlogTask.getId() != 0) {
 			throw new ValidationException("Id for a new backlog task must be unassigned");
+		}
+		if (backlogTask.getCreationDate() == null) {
+			backlogTask.setCreationDate(LocalDate.now());
 		}
 		
 		return backlogTaskRepository.saveAndFlush(backlogTask);
@@ -103,7 +112,6 @@ public class BacklogTaskController {
 			//TODO This should return an error
 			return addBacklogTask(backlogTask);
 		}
-		
 		
 	}
 	

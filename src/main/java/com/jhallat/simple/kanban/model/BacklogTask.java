@@ -1,5 +1,7 @@
 package com.jhallat.simple.kanban.model;
 
+import java.time.LocalDate;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,6 +21,7 @@ public class BacklogTask {
 	private int statusId;
 	@NotBlank
 	private String description;
+	private LocalDate creationDate;
 	
 	public int getId() {
 		return id;
@@ -37,6 +40,12 @@ public class BacklogTask {
 	}
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	public LocalDate getCreationDate() {
+		return creationDate;
+	}
+	public void setCreationDate(LocalDate creationDate) {
+		this.creationDate = creationDate;
 	}
 	
 	
