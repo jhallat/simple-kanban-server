@@ -26,6 +26,7 @@ CREATE TABLE backlog_task (
 	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
 	creation_date DATE,
 	status_id INT NOT NULL,
+	goal_id INT NOT NULL DEFAULT 0,
 	description VARCHAR(250),
 	primary key (id)	
 );

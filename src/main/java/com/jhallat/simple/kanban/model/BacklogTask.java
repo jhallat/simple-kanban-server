@@ -19,6 +19,7 @@ public class BacklogTask {
 	private int id;
 	@Min(1)
 	private int statusId;
+	private int goalId;
 	@NotBlank
 	private String description;
 	private LocalDate creationDate;
@@ -34,6 +35,12 @@ public class BacklogTask {
 	}
 	public void setStatusId(int statusId) {
 		this.statusId = statusId;
+	}
+	public int getGoalId() {
+		return goalId;
+	}
+	public void setGoalId(int goalId) {
+		this.goalId = goalId;
 	}
 	public String getDescription() {
 		return description;
