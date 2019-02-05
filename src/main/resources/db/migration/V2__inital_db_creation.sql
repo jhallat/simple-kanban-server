@@ -1,3 +1,10 @@
+CREATE TABLE user (
+	id INT NOT NULL AUTO_INCREMENT,
+	username VARCHAR(15),
+	password VARCHAR(70),
+	PRIMARY KEY (id)
+);
+
 CREATE TABLE status (
 	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
 	category varchar(15),
@@ -24,6 +31,7 @@ INSERT INTO status (category, code, description, initial) VALUES ('goal', 'cance
 
 CREATE TABLE backlog_task (
 	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+	user_id INT NOT NULL,
 	creation_date DATE,
 	status_id INT NOT NULL,
 	goal_id INT NOT NULL DEFAULT 0,
@@ -33,6 +41,7 @@ CREATE TABLE backlog_task (
 
 CREATE TABLE workflow_task (
 	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+	user_id INT NOT NULL,
 	creation_date DATE,
 	status_id INT NOT NULL,
 	status_date DATE,
@@ -42,6 +51,7 @@ CREATE TABLE workflow_task (
 
 CREATE TABLE goal (
 	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+	user_id INT NOT NULL,
 	status_id INT NOT NULL,
 	priority INT NOT NULL,
 	creation_date DATE,
