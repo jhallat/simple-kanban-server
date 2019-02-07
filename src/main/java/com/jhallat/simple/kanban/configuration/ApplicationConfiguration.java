@@ -12,7 +12,8 @@ public class ApplicationConfiguration implements WebMvcConfigurer {
 		
 		registry.addMapping("/**")
 			.allowedOrigins("http://localhost:4200")
-			.allowedMethods("GET", "POST", "PUT", "DELETE", "HEAD")
+			.allowedMethods("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS")
+			.allowedHeaders("*")
 			.allowCredentials(true);
 		
 	}

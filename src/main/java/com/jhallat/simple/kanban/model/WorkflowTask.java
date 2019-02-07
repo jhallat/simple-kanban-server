@@ -16,6 +16,7 @@ public class WorkflowTask {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	private int statusId;
+	private long userId;
 	private String description;
 	private LocalDate creationDate;
 	private LocalDate statusDate;
@@ -50,5 +51,10 @@ public class WorkflowTask {
 	public void setCreationDate(LocalDate creationDate) {
 		this.creationDate = creationDate;
 	}
-	
+	public long getUserId() {
+		return this.userId;
+	}
+	public void setUserId(long userId) {
+		this.userId = userId;
+	}
 }
