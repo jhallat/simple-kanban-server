@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import javax.validation.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,6 +28,7 @@ import com.jhallat.simple.kanban.model.WorkflowTask;
 import com.jhallat.simple.kanban.repository.BacklogTaskRepository;
 import com.jhallat.simple.kanban.repository.StatusRepository;
 import com.jhallat.simple.kanban.repository.WorkflowTaskRepository;
+import com.jhallat.simple.kanban.security.CurrentUserUtility;
 
 import io.swagger.annotations.ApiOperation;
 
@@ -35,6 +38,9 @@ public class BacklogTaskController {
 
 	private static final String BACKLOG = "backlog";
 	private static final String WORKFLOW = "workflow";
+	
+	@Autowired
+	private CurrentUserUtility currentUserUtility;
 	
 	@Autowired
 	private BacklogTaskRepository backlogTaskRepository;
@@ -50,9 +56,10 @@ public class BacklogTaskController {
 
 	
 	@GetMapping("/backlog-tasks")
-	public ResponseEntity<List<BacklogTask>> getBacklogTasks() throws NotFoundException {
+	public ResponseEntity<List<BacklogTask>> getBacklogTasks(@RequestHeader HttpHeaders headers) throws NotFoundException {
 	
-		List<BacklogTask> backlogTasks = backlogTaskRepository.findAll();
+		long userId = currentUserUtility.getCurrentUserId(headers);
+		List<BacklogTask> backlogTasks = backlogTaskRepository.findByUserId(userId);
 		if (backlogTasks.isEmpty()) {
 			throw new NotFoundException("No backlog tasks found");
 		} 
@@ -64,22 +71,25 @@ public class BacklogTaskController {
 	@ApiOperation(value="Add a backlog task",
 	              notes="Adds a backlog task and returns the newly created task. If the creation date has not been set by the caller, the " + 
 	                    "creation date will be set to the current date")
-	public BacklogTask addBacklogTask(@Valid @RequestBody BacklogTask backlogTask)  {
+	public BacklogTask addBacklogTask(@Valid @RequestBody BacklogTask backlogTask, @RequestHeader HttpHeaders headers)  {
 		
+		long userId = currentUserUtility.getCurrentUserId(headers);
 		if (backlogTask.getId() != 0) {
 			throw new ValidationException("Id for a new backlog task must be unassigned");
 		}
 		if (backlogTask.getCreationDate() == null) {
 			backlogTask.setCreationDate(LocalDate.now());
 		}
+		backlogTask.setUserId(userId);
 		
 		return backlogTaskRepository.saveAndFlush(backlogTask);
 		
 	}
 	
 	@PutMapping("/backlog-tasks/{id}") 
-	public BacklogTask updateBacklogTask(@PathVariable("id") int id, @RequestBody BacklogTask backlogTask){
+	public BacklogTask updateBacklogTask(@PathVariable("id") int id, @RequestBody BacklogTask backlogTask, @RequestHeader HttpHeaders headers){
 		
+		long userId = currentUserUtility.getCurrentUserId(headers);
 		if (workflowId == 0) {
 			Optional<Status> returnValue = statusRepository.findByCategoryAndCode(BACKLOG, "workflow");
 			if (returnValue.isPresent()) {
@@ -101,16 +111,18 @@ public class BacklogTaskController {
 			currentTask.setId(backlogTask.getId());
 			currentTask.setStatusId(backlogTask.getStatusId());
 			currentTask.setDescription(backlogTask.getDescription());
+			currentTask.setUserId(userId);
 			if (backlogTask.getStatusId() == workflowId) {
 				WorkflowTask workflowTask = new WorkflowTask();
 				workflowTask.setDescription(backlogTask.getDescription());
 				workflowTask.setStatusId(readyId);
+				workflowTask.setUserId(userId);
 				workflowTaskRepository.saveAndFlush(workflowTask);
 			}
 			return backlogTaskRepository.saveAndFlush(currentTask);
 		} else {
 			//TODO This should return an error
-			return addBacklogTask(backlogTask);
+			return addBacklogTask(backlogTask, headers);
 		}
 		
 	}

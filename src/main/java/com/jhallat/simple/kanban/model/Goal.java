@@ -18,6 +18,7 @@ public class Goal {
 	private int id;
 	@Min(1)
 	private int statusId;
+	private long userId;
 	private int priority;
 	private LocalDate creationDate;
 	private String description;
@@ -73,7 +74,11 @@ public class Goal {
 	public void setCreationDate(LocalDate creationDate) {
 		this.creationDate = creationDate;
 	}
-	
-	
+	public long getUserId() {
+		return this.userId;
+	}
+	public void setUserId(long userId) {
+		this.userId = userId;
+	}
 
 }

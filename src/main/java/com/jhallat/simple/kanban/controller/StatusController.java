@@ -32,12 +32,12 @@ public class StatusController {
 	              notes="Returns all status values associated with the category .")
 	public ResponseEntity<List<Status>> getBacklogStatuses(@RequestParam("category") String category) {
 		List<Status> statuses =  statusRepository.findByCategory(category);
-		if (statuses.isEmpty()) {
-			logger.info(String.format("Statuses not found for category '%s'", category));
-			return new ResponseEntity<>(statuses, HttpStatus.NOT_FOUND);
-		} else {
+		//if (statuses.isEmpty()) {
+		//	logger.info(String.format("Statuses not found for category '%s'", category));
+		//	return new ResponseEntity<>(statuses, HttpStatus.NOT_FOUND);
+		//} else {
 			return new ResponseEntity<>(statuses, HttpStatus.OK);
-		}
+		//}
 	}
 	
 }

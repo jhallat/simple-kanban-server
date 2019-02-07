@@ -18,6 +18,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.jhallat.simple.kanban.model.ApiResponse;
 import com.jhallat.simple.kanban.model.User;
+import com.jhallat.simple.kanban.model.UserAuthorization;
 import com.jhallat.simple.kanban.repository.UserRepository;
 import com.jhallat.simple.kanban.security.JwtTokenProvider;
 import com.jhallat.simple.kanban.security.SecurityManagerService;
@@ -43,7 +44,7 @@ public class AuthorizationController {
     private PasswordEncoder passwordEncoder;
     
 	@PostMapping("user/login")
-	public ResponseEntity<String> login(@RequestBody User user) {	
+	public ResponseEntity<UserAuthorization> login(@RequestBody User user) {	
 		
 		boolean authorized = securityManager.validateUser(user);
 		
@@ -58,9 +59,13 @@ public class AuthorizationController {
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 
 			String jwt = tokenProvider.generateToken(authentication);
-			return ResponseEntity.ok(jwt);
+			UserAuthorization userAuthorization = new UserAuthorization();
+			userAuthorization.setUsername(user.getUsername());
+			userAuthorization.setBearerToken(jwt);
+			userAuthorization.setAuthenticated(true);
+			return ResponseEntity.ok(userAuthorization);
 		} else {
-			return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new UserAuthorization());
 		}
 		
 	} 
