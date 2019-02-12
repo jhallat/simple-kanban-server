@@ -62,6 +62,7 @@ public class NoteController {
 		if (searchResult.isPresent()) {
 			Note currentNote = searchResult.get();
 			currentNote.setText(note.getText());
+			currentNote.setStatusId(note.getStatusId());
 			currentNote.setUserId(userId);
 			return noteRepository.saveAndFlush(currentNote);
 		} else {
