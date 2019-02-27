@@ -6,6 +6,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+
 @Entity
 @Table(name="status")
 public class Status {
@@ -17,7 +19,8 @@ public class Status {
 	private String code;
 	private String description;
 	private boolean initial;
-	
+
+	@JsonGetter("statusId")
 	public int getId() {
 		return id;
 	}
