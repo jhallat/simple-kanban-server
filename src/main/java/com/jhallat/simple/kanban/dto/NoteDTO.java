@@ -1,4 +1,4 @@
-package com.jhallat.simple.kanban.model;
+package com.jhallat.simple.kanban.dto;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,7 +10,7 @@ import javax.validation.constraints.NotEmpty;;
 
 @Entity
 @Table(name="notes")
-public class Note {
+public class NoteDTO {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

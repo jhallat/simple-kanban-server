@@ -4,10 +4,10 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.jhallat.simple.kanban.model.Note;
+import com.jhallat.simple.kanban.dto.NoteDTO;
 
-public interface NoteRepository extends JpaRepository<Note, Integer> {
+public interface NoteRepository extends JpaRepository<NoteDTO, Integer> {
 	
-	List<Note> findByUserId(long userId);
+	List<NoteDTO> findByUserId(long userId);
 
 }
